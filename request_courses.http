@@ -1,0 +1,47 @@
+###   Crear Curso
+POST http://localhost:5000/courses HTTP/1.1
+content-type: application/json
+
+{
+  "nombre": "Aprende Java curso completo 99 horas :D",
+  "descripcion": "Curso completo para aprender Java desde cero.",
+  "imagen_principal": "foto1.jpg",
+  "imagen_detalle": "foto2.jpg",
+  "valoraciones": [],
+  "valoracion_promedio": 0,
+  "comentarios": [],
+  "participantes": 0,
+  "unidades": [
+    {
+      "nombre": "Introducción a Java",
+      "orden": 1,
+      "clases": [
+        {
+          "nombre": "Variables",
+          "descripcion": "Aprende variables en Java.",
+          "video_url": "https://youtube.com/Java.mp4",
+          "archivos_adjuntos": ["introduccion.pdf"],
+          "orden": 1,
+          "comentarios": []
+        },
+        {
+          "nombre": "Ciclos",
+          "descripcion": "Aprende a usar los ciclos en Java.",
+          "video_url": "https://youtube.com/ciclos.mp4",
+          "archivos_adjuntos": ["ciclos.pdf"],
+          "orden": 2,
+          "comentarios": []
+        }
+      ]
+    }
+  ]
+}
+
+
+
+###   Obtener Cursos
+GET http://localhost:5000/courses HTTP/1.1
+
+
+###Obtener Curso por ID
+GET http://localhost:5000/courses/6722e8e5fe3136b9ce99de70 HTTP/1.1

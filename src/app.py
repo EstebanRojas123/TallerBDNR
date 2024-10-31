@@ -1,9 +1,10 @@
-from flask import Flask, render_template #Import the Flask class from the flask module
-from dotenv import load_dotenv # Import the load_dotenv function from the dotenv module
-import os # Import the os module
-from flask_cors import CORS  # Importa Flask-CORS
-from config.mongodb import mongo # Import the mongo object from the mongodb module
-from routes.users_routes import users # Import the users object from the users_routes module
+from flask import Flask, render_template
+from dotenv import load_dotenv
+import os
+from flask_cors import CORS
+from config.mongodb import mongo
+from routes.users_routes import users
+from routes.courses_routes import courses  
 
 load_dotenv()
 app = Flask(__name__)
@@ -16,8 +17,7 @@ def index():
     return render_template('index.html')
 
 app.register_blueprint(users, url_prefix='/users')
-
-
+app.register_blueprint(courses, url_prefix='/courses')  
 
 if __name__ == '__main__':
     app.run(debug=True)
