@@ -1,0 +1,2 @@
+###obtener detalle clase
+GET http://localhost:5000/classes/6722df426c158ac18588c994
