@@ -3,32 +3,33 @@ POST http://localhost:5000/courses HTTP/1.1
 content-type: application/json
 
 {
-  "nombre": "Aprende Java curso completo 99 horas :D",
-  "descripcion": "Curso completo para aprender Java desde cero.",
+  "nombre": "Aprende a jugar minecraft",
+  "descripcion": "Curso completo para aprender Minecraft desde cero.",
   "imagen_principal": "foto1.jpg",
   "imagen_detalle": "foto2.jpg",
   "valoraciones": [],
   "valoracion_promedio": 0,
   "comentarios": [],
   "participantes": 0,
+  "inscritos":[],
   "unidades": [
     {
-      "nombre": "Introducción a Java",
+      "nombre": "Mesa de crafteo",
       "orden": 1,
       "clases": [
         {
-          "nombre": "Variables",
-          "descripcion": "Aprende variables en Java.",
+          "nombre": "Talando arboles",
+          "descripcion": "Aprende a talar arboles",
           "video_url": "https://youtube.com/Java.mp4",
           "archivos_adjuntos": ["introduccion.pdf"],
           "orden": 1,
           "comentarios": []
         },
         {
-          "nombre": "Ciclos",
-          "descripcion": "Aprende a usar los ciclos en Java.",
+          "nombre": "Creando mesa de crafteo",
+          "descripcion": "Aprende a crear una mesa de crafteo.",
           "video_url": "https://youtube.com/ciclos.mp4",
-          "archivos_adjuntos": ["ciclos.pdf"],
+          "archivos_adjuntos": ["mesa.pdf"],
           "orden": 2,
           "comentarios": []
         }

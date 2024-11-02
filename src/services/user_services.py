@@ -20,7 +20,6 @@ def create_user_service():   #crear un usuario
     username = data.get('username', None)
     password = data.get('password', None)
     admin = data.get('admin', None)
-    courses = data.get('courses',[])
     
     if username is None or password is None or admin is None:
         print("dentro del if")
@@ -29,8 +28,7 @@ def create_user_service():   #crear un usuario
     new_user = {
         "username": username,
         "password": password,
-        "admin": admin,
-        "courses": courses,
+        "admin": admin
     }
     
     result = mongo.db.users.insert_one(new_user)

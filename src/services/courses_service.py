@@ -17,7 +17,8 @@ def create_course_service():
         "valoracion_promedio": 0,
         "comentarios": [],
         "participantes": 0,
-        "unidades": []  # Esto se llenará después con los IDs de las unidades
+        "unidades": [],  # Esto se llenará después con los IDs de las unidades
+        "inscritos": []  # Lista de IDs de usuarios inscritos, inicialmente vacía
     }
     
     # Insertar el curso en la colección 'curso' y obtener el ID
