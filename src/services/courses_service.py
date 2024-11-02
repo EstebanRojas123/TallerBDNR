@@ -95,3 +95,25 @@ def get_course_by_id(id):
     course["unidades"] = get_units_by_ids(unit_ids)
 
     return Response(json_util.dumps(course), mimetype="application/json"), 200
+
+
+
+def register_user_in_course(course_id, user_id):
+    course = mongo.db.curso.find_one({"_id": ObjectId(course_id)})
+
+    if not course:
+        return jsonify({"error": "Curso no encontrado"}), 404
+
+
+    if user_id in course.get("inscritos", []):
+        return jsonify({"message": "Usuario ya está registrado en el curso"}), 200
+
+    mongo.db.curso.update_one(
+        {"_id": ObjectId(course_id)},
+        {
+            "$push": {"inscritos": user_id},
+            "$inc": {"participantes": 1} 
+        }
+    )
+
+    return jsonify({"message": "Usuario registrado correctamente"}), 200

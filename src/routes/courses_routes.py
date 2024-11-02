@@ -1,5 +1,5 @@
-from flask import Blueprint
-from services import courses_service 
+from flask import Blueprint,request,jsonify
+from services import courses_service
 
 courses = Blueprint('courses', __name__)
 
@@ -16,3 +16,16 @@ def get_all_courses():
 @courses.route('/<id>', methods=['GET'])
 def get_course(id):
     return courses_service.get_course_by_id(id)
+
+
+
+
+@courses.route('/<course_id>/register', methods=['POST'])
+def register_user(course_id):
+    data = request.get_json()
+    user_id = data.get("user_id")
+
+    if not user_id:
+        return jsonify({"error": "Se requiere el ID del usuario"}), 400
+
+    return courses_service.register_user_in_course(course_id, user_id)

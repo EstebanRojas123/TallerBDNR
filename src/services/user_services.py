@@ -5,14 +5,15 @@ from bson import json_util, ObjectId
 
 
 
-def get_users_service(): #obtener todos los usuarios
-    data = mongo.db.juegos.find()
+def get_users_service():  # Obtener todos los usuarios
+    data = mongo.db.users.find()
     users = []
     for user in data:
         user['_id'] = str(user['_id'])  # Convertir ObjectId a string
         users.append(user)
     
-    return jsonify({'users': user})
+    return jsonify({'users': users})  # Cambié 'user' a 'users'
+
 
 
 def create_user_service():   #crear un usuario  
