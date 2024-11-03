@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from flask_cors import CORS
 from config.mongodb import mongo
+from config.initialize_db import initialize_database
 from routes.users_routes import users
 from routes.courses_routes import courses 
 from routes.units_routes import units
@@ -14,6 +15,9 @@ app = Flask(__name__)
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo.init_app(app)
 CORS(app)
+
+initialize_database()
+
 
 @app.route('/')
 def index():
