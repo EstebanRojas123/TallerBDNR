@@ -3,7 +3,7 @@ POST http://localhost:5000/courses HTTP/1.1
 content-type: application/json
 
 {
-  "nombre": "Aprende a jugar minecraft",
+  "nombre": "Aprende a jugar LOL",
   "descripcion": "Curso completo para aprender Minecraft desde cero.",
   "imagen_principal": "foto1.jpg",
   "imagen_detalle": "foto2.jpg",
