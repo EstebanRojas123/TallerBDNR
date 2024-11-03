@@ -8,6 +8,7 @@ from routes.courses_routes import courses
 from routes.units_routes import units
 from routes.class_routes import classes
 
+
 load_dotenv()
 app = Flask(__name__)
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')

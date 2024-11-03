@@ -1,5 +1,5 @@
 from flask import Blueprint,request,jsonify
-from services import courses_service
+from services import courses_service, comments_service
 
 courses = Blueprint('courses', __name__)
 
@@ -18,8 +18,6 @@ def get_course(id):
     return courses_service.get_course_by_id(id)
 
 
-
-
 @courses.route('/<course_id>/register', methods=['POST'])
 def register_user(course_id):
     data = request.get_json()
@@ -29,3 +27,8 @@ def register_user(course_id):
         return jsonify({"error": "Se requiere el ID del usuario"}), 400
 
     return courses_service.register_user_in_course(course_id, user_id)
+
+# En courses_routes.py (deberías tener una ruta similar para comentarios de cursos)
+@courses.route('/<course_id>/comment', methods=['POST'])
+def create_course_comment(course_id):
+    return comments_service.create_comment_service(entity_type="curso", entity_id=course_id)

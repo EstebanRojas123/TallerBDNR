@@ -45,7 +45,7 @@ GET http://localhost:5000/courses HTTP/1.1
 
 
 ###Obtener Curso por ID
-GET http://localhost:5000/courses/6722e8e5fe3136b9ce99de70 HTTP/1.1
+GET http://localhost:5000/courses/6722df416c158ac18588c98f HTTP/1.1
 
 
 
@@ -54,5 +54,5 @@ POST http://localhost:5000/courses/6722df416c158ac18588c98f/register
 content-type: application/json
 
 {
-  "user_id":"6718653d42e1d60488dc0bee"
+  "user_id":"6718652142e1d60488dc0bed"
 }
