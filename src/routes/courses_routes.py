@@ -28,7 +28,6 @@ def register_user(course_id):
 
     return courses_service.register_user_in_course(course_id, user_id)
 
-# En courses_routes.py (deberías tener una ruta similar para comentarios de cursos)
 @courses.route('/<course_id>/comment', methods=['POST'])
 def create_course_comment(course_id):
     return comments_service.create_comment_service(entity_type="curso", entity_id=course_id)

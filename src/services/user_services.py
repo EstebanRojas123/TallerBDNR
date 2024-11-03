@@ -9,10 +9,10 @@ def get_users_service():  # Obtener todos los usuarios
     data = mongo.db.users.find()
     users = []
     for user in data:
-        user['_id'] = str(user['_id'])  # Convertir ObjectId a string
+        user['_id'] = str(user['_id']) 
         users.append(user)
     
-    return jsonify({'users': users})  # Cambié 'user' a 'users'
+    return jsonify({'users': users})  
 
 
 
