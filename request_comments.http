@@ -3,7 +3,7 @@ POST http://localhost:5000/courses/6722df416c158ac18588c98f/comment
 Content-Type: application/json
 
 {
-  "title": "AAA",
+  "title": "Curso excelente",
   "id_user": "6718652142e1d60488dc0bed",
   "content": "Curso excelente y bien explicado.",
   "likes": 5,
