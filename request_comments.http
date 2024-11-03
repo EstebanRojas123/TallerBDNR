@@ -16,9 +16,9 @@ POST http://localhost:5000/classes/6722df426c158ac18588c991/comment
 Content-Type: application/json
 
 {
-  "title": "Titulo del comentario",
+  "title": "Mala clase",
   "id_user": "6718652142e1d60488dc0bed",
-  "content": "Curso excelente y bien explicado.",
+  "content": "No entendi nada de la clase.",
   "likes": 5,
   "dislikes": 2
 }   
