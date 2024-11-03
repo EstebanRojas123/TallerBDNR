@@ -1,10 +1,10 @@
 ###comentario Curso
-POST http://localhost:5000/courses/6722df416c158ac18588c98f/comment
+POST http://localhost:5000/courses/6727d1b7fa9a003b933bd6e4/comment
 Content-Type: application/json
 
 {
   "title": "Curso excelente",
-  "id_user": "6718652142e1d60488dc0bed",
+  "id_user": "6727cd5519bd43e5ce479a63",
   "content": "Curso excelente y bien explicado.",
   "likes": 5,
   "dislikes": 2
@@ -12,12 +12,12 @@ Content-Type: application/json
 
 
 ###comentario Clase
-POST http://localhost:5000/classes/6722df426c158ac18588c991/comment
+POST http://localhost:5000/classes/6727d1bafa9a003b933bd6f8/comment
 Content-Type: application/json
 
 {
   "title": "Mala clase",
-  "id_user": "6718652142e1d60488dc0bed",
+  "id_user": "6727cd5519bd43e5ce479a63",
   "content": "No entendi nada de la clase.",
   "likes": 5,
   "dislikes": 2

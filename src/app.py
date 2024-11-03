@@ -8,6 +8,7 @@ from routes.users_routes import users
 from routes.courses_routes import courses 
 from routes.units_routes import units
 from routes.class_routes import classes
+from poblar_db import populate_database  # Importa la función de población
 
 
 load_dotenv()
@@ -16,7 +17,8 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo.init_app(app)
 CORS(app)
 
-initialize_database()
+# Ejecutar población de la base de datos
+populate_database()
 
 
 @app.route('/')

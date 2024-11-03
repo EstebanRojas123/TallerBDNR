@@ -3,8 +3,8 @@ POST http://localhost:5000/courses HTTP/1.1
 content-type: application/json
 
 {
-  "nombre": "Aprende a jugar LOL",
-  "descripcion": "Curso completo para aprender Minecraft desde cero.",
+  "nombre": "Curso 1",
+  "descripcion": "Este es el primer Curso.",
   "imagen_principal": "foto1.jpg",
   "imagen_detalle": "foto2.jpg",
   "valoraciones": [],
@@ -14,22 +14,22 @@ content-type: application/json
   "inscritos":[],
   "unidades": [
     {
-      "nombre": "Mesa de crafteo",
+      "nombre": "Unidad 1",
       "orden": 1,
       "clases": [
         {
-          "nombre": "Talando arboles",
-          "descripcion": "Aprende a talar arboles",
-          "video_url": "https://youtube.com/Java.mp4",
+          "nombre": "clase 1",
+          "descripcion": "Descripcion de la clase 1",
+          "video_url": "https://youtube.com/clase1.mp4",
           "archivos_adjuntos": ["introduccion.pdf"],
           "orden": 1,
           "comentarios": []
         },
         {
-          "nombre": "Creando mesa de crafteo",
-          "descripcion": "Aprende a crear una mesa de crafteo.",
-          "video_url": "https://youtube.com/ciclos.mp4",
-          "archivos_adjuntos": ["mesa.pdf"],
+          "nombre": "Clase 2",
+          "descripcion": "Descripcion de la clase 2",
+          "video_url": "https://youtube.com/clase2.mp4",
+          "archivos_adjuntos": ["clase2.pdf"],
           "orden": 2,
           "comentarios": []
         }
@@ -37,6 +37,8 @@ content-type: application/json
     }
   ]
 }
+
+
 
 
 

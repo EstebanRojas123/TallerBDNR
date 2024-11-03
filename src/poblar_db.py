@@ -2,25 +2,27 @@ from pymongo import MongoClient
 from bson import ObjectId
 from datetime import datetime
 from dotenv import load_dotenv
+from config.mongodb import mongo
+from bson.objectid import ObjectId
 import os
 
 # Cargar variables de entorno desde el archivo .env
-load_dotenv()
+#load_dotenv()
 
 # Obtener la URI de MongoDB desde la variable de entorno
-MONGO_URI = os.getenv("MONGO_URI")
+#MONGO_URI = os.getenv("MONGO_URI")
 
 # Conectar a la base de datos en la nube usando la URI obtenida
-client = MongoClient(MONGO_URI)
-db = client['taller1']  # Reemplaza 'DB' con el nombre de tu base de datos
+#client = MongoClient(MONGO_URI)
+#db = client['taller1']  # Reemplaza 'DB' con el nombre de tu base de datos
 
 def clear_database():
     """Opcional: Limpia las colecciones antes de poblar para evitar duplicados."""
-    db.users.delete_many({})
-    db.curso.delete_many({})
-    db.unidad.delete_many({})
-    db.clase.delete_many({})
-    db.comentarios.delete_many({})
+    mongo.db.users.delete_many({})
+    mongo.db.curso.delete_many({})
+    mongo.db.unidad.delete_many({})
+    mongo.db.clase.delete_many({})
+    mongo.db.comentarios.delete_many({})
     print("Colecciones limpiadas.")
 
 def populate_users():
@@ -33,7 +35,7 @@ def populate_users():
         {"username": "user4", "password": "password4", "admin": False},
         {"username": "user5", "password": "password5", "admin": False}
     ]
-    result = db.users.insert_many(users)
+    result = mongo.db.users.insert_many(users)
     user_ids = result.inserted_ids
     print(f"Usuarios insertados con IDs: {user_ids}")
     return user_ids
@@ -105,7 +107,7 @@ def populate_courses(user_ids):
 
     curso_ids = []
     for curso in cursos:
-        curso_id = db.curso.insert_one(curso).inserted_id
+        curso_id = mongo.db.curso.insert_one(curso).inserted_id
         curso_ids.append(curso_id)
         print(f"Curso '{curso['nombre']}' insertado con ID: {curso_id}")
     return curso_ids
@@ -142,7 +144,7 @@ def populate_units(curso_ids):
 
     unidad_ids = {}
     for curso_id in curso_ids:
-        curso = db.curso.find_one({"_id": curso_id})
+        curso = mongo.db.curso.find_one({"_id": curso_id})
         curso_nombre = curso["nombre"]
         unidades = unidades_data.get(curso_nombre, [])
         inserted_unidades = []
@@ -153,11 +155,11 @@ def populate_units(curso_ids):
                 "curso_id": curso_id,
                 "clases": []
             }
-            unidad_id = db.unidad.insert_one(unidad_document).inserted_id
+            unidad_id = mongo.db.unidad.insert_one(unidad_document).inserted_id
             inserted_unidades.append(unidad_id)
             print(f"Unidad '{unidad['nombre']}' insertada con ID: {unidad_id} para el curso '{curso_nombre}'")
         # Actualizar el curso con las unidades
-        db.curso.update_one({"_id": curso_id}, {"$set": {"unidades": inserted_unidades}})
+        mongo.db.curso.update_one({"_id": curso_id}, {"$set": {"unidades": inserted_unidades}})
         unidad_ids[curso_nombre] = inserted_unidades
     return unidad_ids
 
@@ -217,7 +219,7 @@ def populate_classes(unidad_ids):
 
     for curso_nombre, unidades in unidad_ids.items():
         for unidad_id in unidades:
-            unidad = db.unidad.find_one({"_id": unidad_id})
+            unidad = mongo.db.unidad.find_one({"_id": unidad_id})
             unidad_nombre = unidad["nombre"]
             clases = clases_data.get(unidad_nombre, [])
             if not clases:
@@ -233,15 +235,14 @@ def populate_classes(unidad_ids):
                     "comentarios": [],
                     "unidad_id": unidad_id
                 }
-                clase_id = db.clase.insert_one(clase_document).inserted_id
+                clase_id = mongo.db.clase.insert_one(clase_document).inserted_id
                 clases_ids.append(clase_id)
                 print(f"Clase '{clase['nombre']}' insertada con ID: {clase_id} para la unidad '{unidad_nombre}'")
             # Actualizar la unidad con las clases
-            db.unidad.update_one({"_id": unidad_id}, {"$set": {"clases": clases_ids}})
+            mongo.db.unidad.update_one({"_id": unidad_id}, {"$set": {"clases": clases_ids}})
 
 def populate_comments(user_ids, curso_ids, unidad_ids):
     """Inserta comentarios para algunos cursos y clases."""
-    # Seleccionar algunos usuarios al azar para los comentarios
     import random
     selected_users = random.sample(user_ids, 3)  # Selecciona 3 usuarios
 
@@ -277,38 +278,34 @@ def populate_comments(user_ids, curso_ids, unidad_ids):
             "dislikes": 0,
             "fecha": datetime.utcnow(),
             "entity_type": "clase",
-            "entity_id": ""  # Se llenará después
+            "entity_id": str(unidad_ids["Desarrollo Web con Flask"][0])  # ID de una clase específica
         }
     ]
 
     # Insertar comentarios en cursos
     for comentario in comentarios_curso:
-        comment_id = db.comentarios.insert_one(comentario).inserted_id
-        # Actualizar el curso con el comentario
-        db.curso.update_one(
+        comment_id = mongo.db.comentarios.insert_one(comentario).inserted_id
+        mongo.db.curso.update_one(
             {"_id": ObjectId(comentario["entity_id"])},
-            {"$push": {"comentarios": str(comment_id)}}
+            {"$push": {"comentarios": comment_id}}
         )
-        print(f"Comentario '{comentario['title']}' insertado para el curso ID: {comentario['entity_id']}")
+        print(f"Comentario para curso '{comentario['title']}' insertado con ID: {comment_id}")
 
     # Insertar comentarios en clases
-    # Primero, obtener algunas clases para comentar
-    clases = list(db.clase.find().limit(3))  # Selecciona las primeras 3 clases
-    if clases:
-        comentarios_clase[0]["entity_id"] = str(clases[0]["_id"])
-        for comentario in comentarios_clase:
-            comment_id = db.comentarios.insert_one(comentario).inserted_id
-            # Actualizar la clase con el comentario
-            db.clase.update_one(
-                {"_id": ObjectId(comentario["entity_id"])},
-                {"$push": {"comentarios": str(comment_id)}}
-            )
-            print(f"Comentario '{comentario['title']}' insertado para la clase ID: {comentario['entity_id']}")
+    for comentario in comentarios_clase:
+        comment_id = mongo.db.comentarios.insert_one(comentario).inserted_id
+        mongo.db.clase.update_one(
+            {"_id": ObjectId(comentario["entity_id"])},
+            {"$push": {"comentarios": comment_id}}
+        )
+        print(f"Comentario para clase '{comentario['title']}' insertado con ID: {comment_id}")
 
-def main():
+def populate_database():
     """Función principal para poblar la base de datos."""
-    # Opcional: Limpia las colecciones antes de poblar
-    #clear_database()
+    # Verifica si ya hay datos en la colección principal, por ejemplo, en `users`.
+    if mongo.db.users.count_documents({}) > 0:
+        print("La base de datos ya está poblada. No se realizará la población.")
+        return
 
     # Población de datos
     user_ids = populate_users()
@@ -319,5 +316,4 @@ def main():
 
     print("Base de datos poblada correctamente.")
 
-if __name__ == "__main__":
-    main()
+
