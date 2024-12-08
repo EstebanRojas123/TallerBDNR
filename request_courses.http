@@ -47,7 +47,7 @@ GET http://localhost:5000/courses HTTP/1.1
 
 
 ###Obtener Curso por ID
-GET http://localhost:5000/courses/6727d1b7fa9a003b933bd6e4 HTTP/1.1
+GET http://localhost:5000/courses/6727d5a747c76be59e594627 HTTP/1.1
 
 
 
