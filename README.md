@@ -5,3 +5,5 @@
 3. trabajar en el entorno virutal: ./venv/Scripts/activate
 4. instalar librerias: pip install -r requirements.txt
 5. correr aplicación: python src/app.py
+
+Nota: Al probar los endpoints que requieren un ID específico, verifica manualmente los identificadores (_id), ya que se generan de forma aleatoria al poblar la base de datos.
