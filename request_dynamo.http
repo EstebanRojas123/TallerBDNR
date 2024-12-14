@@ -7,12 +7,15 @@ POST http://localhost:5000/dynamodb/add_user
 Content-Type: application/json
 
 {
-  "username": "aaa1",
+  "username": "user123",
   "password": "12345"
 }
 
+####obtener usuarios
+GET http://localhost:5000/dynamodb/users
+
 ### Obtener usuario
-GET http://localhost:5000/dynamodb/get_user/testuser
+GET http://localhost:5000/dynamodb/get_user/juan@gmail.com
 
 
 ### Inscribir usuario en un curso
@@ -20,11 +23,11 @@ POST http://localhost:5000/dynamodb/enroll_user
 Content-Type: application/json
 
 {
-  "username": "testuser",
+  "username": "juan@gmail.com",
   "course_id": "6755cf0f0d56739c787712f1"  
 }
 
-###
+### Obtener Cursos de un usuario  
 GET http://localhost:5000/dynamodb/get_user_courses?username=testuser
 
 ### Obtener login
@@ -32,6 +35,6 @@ POST http://localhost:5000/dynamodb/login
 Content-Type: application/json
 
 {
-  "username": "testuser",
+  "username": "user123",
   "password": "12345"
 }

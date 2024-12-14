@@ -1,9 +1,16 @@
 from flask import Blueprint, request, jsonify
-from services.dynamodb_service import add_user, get_user, enroll_user_in_course, login
+from services.dynamodb_service import add_user, get_user, enroll_user_in_course, login,get_all_users
 from config.dynamodb import dynamodb
 from botocore.exceptions import ClientError
 
 dynamodb_bp = Blueprint('dynamodb', __name__)
+
+@dynamodb_bp.route('/users', methods=['GET'])
+def get_users_route():
+    try:
+        return get_all_users()
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @dynamodb_bp.route('/add_user', methods=['POST'])
 def add_user_route():

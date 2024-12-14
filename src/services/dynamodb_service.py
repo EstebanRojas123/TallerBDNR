@@ -57,3 +57,15 @@ def login(data):
             return {'error': 'Contraseña incorrecta'}, 401
     except ClientError as e:
         raise Exception(f"Error al intentar hacer login: {str(e)}")
+
+
+def get_all_users():
+    table = dynamodb.Table('Users')
+    try:
+        response = table.scan()
+        if 'Items' in response:
+            return jsonify(response['Items']), 200
+        else:
+            return jsonify({'message': 'No se encontraron usuarios'}), 404
+    except ClientError as e:
+        raise Exception(f"Error al obtener los usuarios: {str(e)}")

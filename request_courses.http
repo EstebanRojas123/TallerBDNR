@@ -3,7 +3,7 @@ POST http://localhost:5000/courses HTTP/1.1
 content-type: application/json
 
 {
-  "nombre": "Curso 1",
+  "nombre": "Como programar en Python",
   "descripcion": "Este es el primer Curso.",
   "imagen_principal": "foto1.jpg",
   "imagen_detalle": "foto2.jpg",
@@ -57,4 +57,22 @@ content-type: application/json
 
 {
   "user_id":"6727cd5519bd43e5ce479a63"
+}
+
+
+###agregar rating
+POST http://localhost:5000/courses/6755cf0f0d56739c787712f1/rating 
+content-type: application/json
+
+{
+  "valoracion": 4
+}
+
+
+###agregar comentario
+POST http://localhost:5000/courses/6755cf0f0d56739c787712f1/comment  
+content-type: application/json
+
+{
+  "comentario_id": "4"
 }

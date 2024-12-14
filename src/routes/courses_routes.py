@@ -28,6 +28,13 @@ def register_user(course_id):
 
     return courses_service.register_user_in_course(course_id, user_id)
 
+
+@courses.route('/<course_id>/rating', methods=['POST'])
+def add_course_rating(course_id):
+    return courses_service.add_course_rating_service(course_id)
+
+
+
 @courses.route('/<course_id>/comment', methods=['POST'])
-def create_course_comment(course_id):
-    return comments_service.create_comment_service(entity_type="curso", entity_id=course_id)
+def add_course_comment(course_id):
+    return courses_service.add_course_comment_service(course_id)

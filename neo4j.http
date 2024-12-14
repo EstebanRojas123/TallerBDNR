@@ -1,0 +1,39 @@
+
+
+
+### registrar comentario 
+
+POST http://localhost:5000/neo4j/add-comment HTTP/1.1
+content-type: application/json
+
+{
+  "username": "user123",
+  "course_id": "675cf53ab8ddca92defba5dd",
+  "title": "¡Gran curso!",
+  "details": "Aprendí mucho sobre League of Legends."
+}
+
+### registrar puntuación de curso
+
+POST http://localhost:5000/neo4j/add-rating HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "user123",
+    "course_id": "675cf53ab8ddca92defba5dd",
+    "rating": 3
+}
+
+### actualizar todos los cursos
+
+POST http://localhost:5000/neo4j/sync-courses HTTP/1.1
+Content-Type: application/json
+
+### actualizar todos los usuarios
+
+
+POST http://localhost:5000/neo4j/sync-users HTTP/1.1
+Content-Type: application/json
+
+
+

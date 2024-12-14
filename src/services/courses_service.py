@@ -3,11 +3,10 @@ from flask import request, jsonify,Response
 from bson import ObjectId, json_util
 from services.units_service import get_units_by_ids
 
-# Servicio para crear un curso completo con unidades y clases
+
 def create_course_service():
     data = request.get_json()
     
-    # Crear el curso básico sin unidades ni clases aún
     new_course = {
         "nombre": data["nombre"],
         "descripcion": data["descripcion"],
@@ -17,21 +16,19 @@ def create_course_service():
         "valoracion_promedio": 0,
         "comentarios": [],
         "participantes": 0,
-        "unidades": [],  # Esto se llenará después con los IDs de las unidades
-        "inscritos": []  # Lista de IDs de usuarios inscritos, inicialmente vacía
+        "unidades": [],
+        "inscritos": []
     }
     
-    # Insertar el curso en la colección 'curso' y obtener el ID
     course_id = mongo.db.curso.insert_one(new_course).inserted_id
 
-    # Recorrer las unidades del JSON recibido y crear cada unidad
     unidades_ids = []
     for unidad in data["unidades"]:
         new_unit = {
             "nombre": unidad["nombre"],
             "orden": unidad["orden"],
-            "curso_id": course_id,  # Asociar la unidad al curso
-            "clases": []  # Esto se llenará con los IDs de las clases
+            "curso_id": course_id,
+            "clases": []
         }
         
         unit_id = mongo.db.unidad.insert_one(new_unit).inserted_id
@@ -46,7 +43,7 @@ def create_course_service():
                 "archivos_adjuntos": clase["archivos_adjuntos"],
                 "orden": clase["orden"],
                 "comentarios": [],
-                "unidad_id": unit_id  # Asociar la clase a la unidad
+                "unidad_id": unit_id
             }
 
             class_id = mongo.db.clase.insert_one(new_class).inserted_id
@@ -64,25 +61,31 @@ def create_course_service():
 
     return jsonify({"message": "Curso creado exitosamente", "course_id": str(course_id)}), 201
 
-
-
-
 def get_all_courses_service():
-
     courses = mongo.db.curso.find({}, {
         "nombre": 1,
         "imagen_principal": 1,
         "descripcion": 1,
-        "valoracion_promedio": 1
+        "valoraciones": 1,
+        "valoracion_promedio": 1,
+        "comentarios": 1
     })
-    
+
     course_list = []
     for course in courses:
-        course["_id"] = str(course["_id"])  
-        course_list.append(course)
-    
-    return jsonify({"cursos": course_list}), 200
+        course["_id"] = str(course["_id"])
 
+        if "comentarios" in course:
+            for i, comentario in enumerate(course["comentarios"]):
+                if isinstance(comentario, ObjectId):
+                    course["comentarios"][i] = str(comentario)
+                elif isinstance(comentario, dict):
+                    if "_id" in comentario and isinstance(comentario["_id"], ObjectId):
+                        comentario["_id"] = str(comentario["_id"])
+
+        course_list.append(course)
+
+    return jsonify({"cursos": course_list}), 200
 
 def get_course_by_id(id):
     course = mongo.db.curso.find_one({"_id": ObjectId(id)})
@@ -90,13 +93,10 @@ def get_course_by_id(id):
     if course is None:
         return jsonify({"error": "Curso no encontrado"}), 404
 
-    # Obtener unidades llamando al servicio
     unit_ids = course.get("unidades", [])
     course["unidades"] = get_units_by_ids(unit_ids)
 
     return Response(json_util.dumps(course), mimetype="application/json"), 200
-
-
 
 def register_user_in_course(course_id, user_id):
     course = mongo.db.curso.find_one({"_id": ObjectId(course_id)})
@@ -117,3 +117,49 @@ def register_user_in_course(course_id, user_id):
     )
 
     return jsonify({"message": "Usuario registrado correctamente"}), 200
+
+def add_course_rating_service(course_id):
+    data = request.get_json()
+    valoracion = data.get("valoracion")
+
+    if valoracion is None or not isinstance(valoracion, (int, float)) or not (0 <= valoracion <= 5):
+        return jsonify({"error": "La valoración debe ser un número entre 0 y 5."}), 400
+
+    course = mongo.db.curso.find_one({"_id": ObjectId(course_id)})
+
+    if not course:
+        return jsonify({"error": "Curso no encontrado."}), 404
+
+    mongo.db.curso.update_one(
+        {"_id": ObjectId(course_id)},
+        {"$push": {"valoraciones": valoracion}}
+    )
+
+    valoraciones_actualizadas = course.get("valoraciones", []) + [valoracion]
+    valoracion_promedio = sum(valoraciones_actualizadas) / len(valoraciones_actualizadas)
+
+    mongo.db.curso.update_one(
+        {"_id": ObjectId(course_id)},
+        {"$set": {"valoracion_promedio": valoracion_promedio}}
+    )
+
+    return jsonify({"message": "Valoración agregada correctamente.", "valoracion_promedio": valoracion_promedio}), 200
+
+def add_course_comment_service(course_id):
+    data = request.get_json()
+    comentario_id = data.get("comentario_id")
+
+    if not comentario_id or not isinstance(comentario_id, str):
+        return jsonify({"error": "Se requiere un comentario_id válido."}), 400
+
+    course = mongo.db.curso.find_one({"_id": ObjectId(course_id)})
+
+    if not course:
+        return jsonify({"error": "Curso no encontrado."}), 404
+
+    mongo.db.curso.update_one(
+        {"_id": ObjectId(course_id)},
+        {"$push": {"comentarios": comentario_id}}
+    )
+
+    return jsonify({"message": "Comentario agregado correctamente."}), 200
